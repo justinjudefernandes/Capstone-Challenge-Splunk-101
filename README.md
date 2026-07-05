@@ -239,7 +239,7 @@ Correlation of endpoint, DNS, process creation, network connection, and persiste
 	- Malware resolved ADDC01.KCD.local via DNS before communicating with the Domain Controller using Microsoft RPC.
 	- Malware established outbound communications and persistence through Scheduled Tasks. 
 
-## Actions Performed:
+## 🛑 Response Actions:
 - Reviewed endpoint, process creation, DNS, and network telemetry surrounding the reported suspicious activity.
 - Identified the creation of python.exe by Google Chrome within the user's profile directory.
 - Confirmed the downloaded executable originated from an external source through analysis of the Zone.Identifier alternate data stream.
@@ -255,7 +255,7 @@ Correlation of endpoint, DNS, process creation, network connection, and persiste
 - Assessed the scope and impact of the activity based on available telemetry.
 - Preserved evidence and investigation artifacts for reporting and future analysis.
 
-## Recommendations:
+## 💡 Recommendations:
 - Remove the malicious scheduled task (PythonUpdate) and any associated persistence mechanisms from affected systems.
 - Quarantine and securely delete the malicious executable from the affected endpoint.
 - Perform a full malware scan and endpoint health assessment on FRONTDESK-PC1.
@@ -268,7 +268,7 @@ Correlation of endpoint, DNS, process creation, network connection, and persiste
 - Conduct threat hunting across the environment for similar DNS, RPC, scheduled task, and command-and-control behaviors.
 - Continue user awareness training focused on identifying suspicious downloads and executable files.
 
-## Lessons Learned:
+## 🧠 Lessons Learned:
 - User-reported anomalies can provide valuable early indicators of malicious activity and should be investigated promptly.
 - Correlating endpoint, DNS, and network telemetry enables more accurate reconstruction of attacker behavior and intent. 
 - Monitoring file creation, process execution, DNS resolution, and network connections is critical for identifying the complete attack chain.
