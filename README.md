@@ -71,14 +71,13 @@ index="mydfir-soc" sourcetype=Sysmon EventCode=1 Image="*python.exe"
 #### Screenshot:
 
 <img width="975" height="224" alt="image" src="https://github.com/user-attachments/assets/fe67ba36-38c7-4a72-b1d7-309f0bafb9bb" />
-
  
 #### Findings Summary:
-•	Process: python.exe 
-•	Parent Process: explorer.exe 
-•	User: Ryan Adams 
-•	Execution Path: C:\Users\Ryan.Adams\Music\python.exe 
-•	MITRE ATT&CK: T1204 – User Execution 
+- Process: python.exe
+- Parent Process: explorer.exe
+- User: Ryan Adams
+- Execution Path: C:\Users\Ryan.Adams\Music\python.exe
+- MITRE ATT&CK: T1204 – User Execution 
 
 ### Evidence 3 – Suspected Command-and-Control Communications
 
@@ -90,22 +89,21 @@ DestinationIp="157.245.46.190"
 ```
 
 #### Findings:
-•	One second after execution (at 13:00:33 UTC), python.exe connected to external IP 157.245.46.190 from 172.16.0.110
-•	Communication occurred over TCP port 8888 
-•	Connection timing strongly indicates malware callback activity 
+- One second after execution (at 13:00:33 UTC), python.exe connected to external IP 157.245.46.190 from 172.16.0.110
+- Communication occurred over TCP port 8888
+- Connection timing strongly indicates malware callback activity 
 
 #### Screenshot:
 
 <img width="975" height="191" alt="image" src="https://github.com/user-attachments/assets/3924e18d-410b-4156-adeb-07ad459e6a8a" />
 
- 
 #### Findings Summary:
-•	Source Host: FRONTDESK-PC1 
-•	Source Process: python.exe 
-•	Destination IP: 157.245.46.190 
-•	Destination Port: 8888 
-•	Protocol: TCP 
-•	MITRE ATT&CK: T1071 – Application Layer Protocol 
+- Source Host: FRONTDESK-PC1
+- Source Process: python.exe
+- Destination IP: 157.245.46.190
+- Destination Port: 8888
+- Protocol: TCP
+- MITRE ATT&CK: T1071 – Application Layer Protocol 
 
 ### Evidence 4 – Domain Controller Discovery and Internal RPC Communications
 
@@ -117,17 +115,17 @@ ProcessGuid="{650091ea-9af1-68ef-8e0a-000000001500}"
 ```
 
 #### Findings:
-•	Immediately after execution, python.exe performed a DNS query for ADDC01.KCD.local. 
-•	The DNS response successfully resolved the hostname to 172.16.0.7. 
-•	This indicates that the malware identified the internal Domain Controller before initiating network communication. 
-•	The successful lookup was immediately followed by Microsoft RPC communications to the resolved host.
+- Immediately after execution, python.exe performed a DNS query for ADDC01.KCD.local.
+- The DNS response successfully resolved the hostname to 172.16.0.7.
+- This indicates that the malware identified the internal Domain Controller before initiating network communication.
+- The successful lookup was immediately followed by Microsoft RPC communications to the resolved host.
 
 #### Screenshot:
 
 <img width="975" height="304" alt="image" src="https://github.com/user-attachments/assets/0afcb739-30aa-47d1-b5a0-05495aa5e311" />
 
  #### Findings Summary:
-•	Process: python.exe 
+- Process: python.exe 
 •	DNS Query: ADDC01.KCD.local 
 •	Resolved Address: 172.16.0.7 
 •	Result: Successful (QueryStatus = 0) 
