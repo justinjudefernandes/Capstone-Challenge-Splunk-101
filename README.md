@@ -39,7 +39,7 @@ index="mydfir-soc" "python.exe"
 - Zone Identifier confirms the file originated from an external source
 - Download occurred approximately three minutes before execution 
 
-#### Screenshot:
+#### 📌 Screenshot:
 
 <img width="975" height="411" alt="image" src="https://github.com/user-attachments/assets/0fbaca06-a331-479c-971c-b0703f606895" />
 
@@ -68,7 +68,7 @@ index="mydfir-soc" sourcetype=Sysmon EventCode=1 Image="*python.exe"
 - Executed by Ryan Adams
 - Executed from a non-standard directory 
 
-#### Screenshot:
+#### 📌 Screenshot:
 
 <img width="975" height="224" alt="image" src="https://github.com/user-attachments/assets/fe67ba36-38c7-4a72-b1d7-309f0bafb9bb" />
  
@@ -93,7 +93,7 @@ DestinationIp="157.245.46.190"
 - Communication occurred over TCP port 8888
 - Connection timing strongly indicates malware callback activity 
 
-#### Screenshot:
+#### 📌 Screenshot:
 
 <img width="975" height="191" alt="image" src="https://github.com/user-attachments/assets/3924e18d-410b-4156-adeb-07ad459e6a8a" />
 
@@ -121,7 +121,7 @@ ProcessGuid="{650091ea-9af1-68ef-8e0a-000000001500}"
 - This indicates that the malware identified the internal Domain Controller before initiating network communication.
 - The successful lookup was immediately followed by Microsoft RPC communications to the resolved host.
 
-#### Screenshot:
+#### 📌 Screenshot:
 
 <img width="975" height="304" alt="image" src="https://github.com/user-attachments/assets/0afcb739-30aa-47d1-b5a0-05495aa5e311" />
 
@@ -149,7 +149,7 @@ Image="*python.exe"
 - Established a second connection to the dynamically allocated RPC port 49669.
 - Activity occurred immediately after communication with the external command-and-control server.
 
-#### Screenshot:
+#### 📌 Screenshot:
 
 <img width="975" height="301" alt="image" src="https://github.com/user-attachments/assets/ba5b27d6-3e00-4f8a-9b93-c1ec02382114" />
  
@@ -177,7 +177,7 @@ Image="*python.exe"
 - The task was configured to run at system startup. The task was configured to run under the SYSTEM account.
 - This activity established persistence and would allow the malware to survive system reboots.
 
-#### Screenshot:
+#### 📌 Screenshot:
 
 <img width="975" height="241" alt="image" src="https://github.com/user-attachments/assets/393e0b50-4939-445c-bee2-79d3abc2dd38" />
  
