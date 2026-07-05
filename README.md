@@ -25,6 +25,7 @@ Immediately following the external connection, the malware initiated Microsoft R
 Approximately four minutes later, PowerShell executed schtasks.exe, creating a scheduled task named PythonUpdate configured to execute the malicious binary at system startup under the SYSTEM account, thereby establishing persistence.
 
 ### Evidence 1 – Initial Download via Google Chrome
+
 Splunk Query:
 index="mydfir-soc" "python.exe"
 | table _time sourcetype EventCode Image TargetFilename CommandLine
@@ -51,7 +52,7 @@ Findings Summary:
 •	Additional Evidence: Zone.Identifier ADS 
 •	MITRE ATT&CK: T1105 – Ingress Tool Transfer 
 
-Evidence 2 – Malware Execution
+### Evidence 2 – Malware Execution
 Splunk Query:
 index="mydfir-soc" sourcetype=Sysmon EventCode=1 Image="*python.exe"
 | table _time Image CommandLine ParentImage CurrentDirectory User ProcessGuid ParentProcessGuid
@@ -71,7 +72,7 @@ Findings Summary:
 •	Execution Path: C:\Users\Ryan.Adams\Music\python.exe 
 •	MITRE ATT&CK: T1204 – User Execution 
 
-Evidence 3 – Suspected Command-and-Control Communications
+### Evidence 3 – Suspected Command-and-Control Communications
 Splunk Query:
 index="mydfir-soc" sourcetype=Sysmon EventCode=3
 DestinationIp="157.245.46.190"
@@ -91,7 +92,7 @@ Findings Summary:
 •	Protocol: TCP 
 •	MITRE ATT&CK: T1071 – Application Layer Protocol 
 
-Evidence 4 – Domain Controller Discovery and Internal RPC Communications
+### Evidence 4 – Domain Controller Discovery and Internal RPC Communications
 Splunk Query:
 index="mydfir-soc" sourcetype=Sysmon EventCode=22
 ProcessGuid="{650091ea-9af1-68ef-8e0a-000000001500}"
@@ -111,7 +112,7 @@ Findings Summary:
 •	Assessment: Malware identified the internal Domain Controller prior to initiating RPC communications.
 
 
-Evidence 5 – Internal RPC Communications
+### Evidence 5 – Internal RPC Communications
 Splunk Query:
 index="mydfir-soc" sourcetype=Sysmon EventCode=3
 Image="*python.exe"
@@ -135,7 +136,7 @@ Findings Summary:
 
 
 
-Evidence 6 – Persistence Mechanism
+### Evidence 6 – Persistence Mechanism
 Splunk Query:
 	index="mydfir-soc" "python.exe"
 	| table _time sourcetype EventCode Image TargetFilename CommandLine
