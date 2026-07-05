@@ -34,25 +34,24 @@ index="mydfir-soc" "python.exe"
 ```
 
 #### Findings:
-•	At 12:57:00 UTC, Chrome created C:\Users\Ryan.Adams\Music\python.exe 
-•	Event ID 15 recorded creation of Zone.Identifier 
-•	Zone Identifier confirms the file originated from an external source 
-•	Download occurred approximately three minutes before execution 
+- At 12:57:00 UTC, Chrome created C:\Users\Ryan.Adams\Music\python.exe
+- Event ID 15 recorded creation of Zone.Identifier
+- Zone Identifier confirms the file originated from an external source
+- Download occurred approximately three minutes before execution 
 
 #### Screenshot:
 
 <img width="975" height="411" alt="image" src="https://github.com/user-attachments/assets/0fbaca06-a331-479c-971c-b0703f606895" />
 
- 
 #### Findings Summary:
-•	Host: FRONTDESK-PC1 
-•	User: Ryan Adams 
-•	Download Source Process: chrome.exe 
-•	File Created: python.exe 
-•	Location: C:\Users\Ryan.Adams\Music\ 
-•	Evidence Type: Sysmon Event ID 11 
-•	Additional Evidence: Zone.Identifier ADS 
-•	MITRE ATT&CK: T1105 – Ingress Tool Transfer 
+- Host: FRONTDESK-PC1
+- User: Ryan Adams
+- Download Source Process: chrome.exe
+- File Created: python.exe
+- Location: C:\Users\Ryan.Adams\Music\
+- Evidence Type: Sysmon Event ID 11
+- Additional Evidence: Zone.Identifier ADS
+- MITRE ATT&CK: T1105 – Ingress Tool Transfer 
 
 ### Evidence 2 – Malware Execution
 
@@ -64,10 +63,10 @@ index="mydfir-soc" sourcetype=Sysmon EventCode=1 Image="*python.exe"
 ```
 
 #### Findings:
-•	Executed at 13:00:33 UTC 
-•	Launched by explorer.exe 
-•	Executed by Ryan Adams 
-•	Executed from a non-standard directory 
+- Executed at 13:00:33 UTC
+- Launched by explorer.exe
+- Executed by Ryan Adams
+- Executed from a non-standard directory 
 
 #### Screenshot:
 
