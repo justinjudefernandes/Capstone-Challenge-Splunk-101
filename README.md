@@ -108,6 +108,7 @@ DestinationIp="157.245.46.190"
 ### Evidence 4 – Domain Controller Discovery and Internal RPC Communications
 
 #### Splunk Query:
+
 ```KQL Query:
 index="mydfir-soc" sourcetype=Sysmon EventCode=22
 ProcessGuid="{650091ea-9af1-68ef-8e0a-000000001500}"
@@ -125,15 +126,16 @@ ProcessGuid="{650091ea-9af1-68ef-8e0a-000000001500}"
 <img width="975" height="304" alt="image" src="https://github.com/user-attachments/assets/0afcb739-30aa-47d1-b5a0-05495aa5e311" />
 
  #### Findings Summary:
-- Process: python.exe 
-•	DNS Query: ADDC01.KCD.local 
-•	Resolved Address: 172.16.0.7 
-•	Result: Successful (QueryStatus = 0) 
-•	Assessment: Malware identified the internal Domain Controller prior to initiating RPC communications.
-
+- Process: python.exe
+- DNS Query: ADDC01.KCD.local
+- Resolved Address: 172.16.0.7
+- Result: Successful (QueryStatus = 0)
+- Assessment: Malware identified the internal Domain Controller prior to initiating RPC communications.
 
 ### Evidence 5 – Internal RPC Communications
+
 #### Splunk Query:
+
 ```KQL Query:
 index="mydfir-soc" sourcetype=Sysmon EventCode=3
 Image="*python.exe"
@@ -142,24 +144,22 @@ Image="*python.exe"
 ```
 
 #### Findings:
-•	Immediately after resolving ADDC01.KCD.local, the malware initiated Microsoft RPC communications with 172.16.0.7. 
-•	Connected to the RPC Endpoint Mapper on TCP port 135. 
-•	Established a second connection to the dynamically allocated RPC port 49669. 
-•	Activity occurred immediately after communication with the external command-and-control server.
+- Immediately after resolving ADDC01.KCD.local, the malware initiated Microsoft RPC communications with 172.16.0.7.
+- Connected to the RPC Endpoint Mapper on TCP port 135.
+- Established a second connection to the dynamically allocated RPC port 49669.
+- Activity occurred immediately after communication with the external command-and-control server.
 
 #### Screenshot:
 
 <img width="975" height="301" alt="image" src="https://github.com/user-attachments/assets/ba5b27d6-3e00-4f8a-9b93-c1ec02382114" />
-
  
 #### Findings Summary:
-•	Source IP: 172.16.0.110 
-•	Destination Host: ADDC01.KCD.local
-•	Destination IP: 172.16.0.7 
-•	Destination Ports: 135, 49669 
-•	Protocol: TCP 
-•	Assessment: Domain-aware RPC communication with the internal Domain Controller. Available telemetry confirms hostname resolution and RPC connectivity but does not demonstrate successful remote execution or compromise of the Domain Controller.
-
+- Source IP: 172.16.0.110
+- Destination Host: ADDC01.KCD.local
+- Destination IP: 172.16.0.7
+- Destination Ports: 135, 49669
+- Protocol: TCP
+- Assessment: Domain-aware RPC communication with the internal Domain Controller. Available telemetry confirms hostname resolution and RPC connectivity but does not demonstrate successful remote execution or compromise of the Domain Controller.
 
 ### Evidence 6 – Persistence Mechanism
 
@@ -171,43 +171,42 @@ Image="*python.exe"
 ```
 
 #### Findings:
-•	At 13:04:59 UTC, PowerShell executed a command invoking schtasks.exe. 
-•	The command created a scheduled task named PythonUpdate. 
-•	The task was configured to execute C:\Users\Ryan.Adams\Music\python.exe. 
-•	The task was configured to run at system startup. The task was configured to run under the SYSTEM account. 
-•	This activity established persistence and would allow the malware to survive system reboots.
+- At 13:04:59 UTC, PowerShell executed a command invoking schtasks.exe.
+- The command created a scheduled task named PythonUpdate.
+- The task was configured to execute C:\Users\Ryan.Adams\Music\python.exe.
+- The task was configured to run at system startup. The task was configured to run under the SYSTEM account.
+- This activity established persistence and would allow the malware to survive system reboots.
 
 #### Screenshot:
 
 <img width="975" height="241" alt="image" src="https://github.com/user-attachments/assets/393e0b50-4939-445c-bee2-79d3abc2dd38" />
-
  
 #### Findings Summary:
-•	Persistence Type: Scheduled Task 
-•	Task Name: PythonUpdate 
-•	Trigger: On Startup 
-•	Account: SYSTEM 
-•	Executable: python.exe 
-•	MITRE ATT&CK: T1053.005 – Scheduled Task 
+- Persistence Type: Scheduled Task 
+- Task Name: PythonUpdate
+- Trigger: On Startup
+- Account: SYSTEM
+- Executable: python.exe
+- MITRE ATT&CK: T1053.005 – Scheduled Task 
 
 ### Attack Timeline:
-•	12:55:55 UTC – Ryan Adams launched Google Chrome via Windows Explorer. 
-•	12:57:00 UTC – Google Chrome created/downloaded C:\Users\Ryan.Adams\Music\python.exe. 
-•	12:57:18 UTC – Zone.Identifier alternate data stream was created, indicating the file originated from an external source. 
-•	13:00:33 UTC – Ryan Adams executed python.exe from the Music directory. 
-•	13:00:34 UTC – python.exe resolved ADDC01.KCD.local to 172.16.0.7 via DNS.
-•	13:00:34 UTC – python.exe established an outbound connection to 157.245.46.190:8888 (suspected C2 communication). 
-•	13:00:34 UTC – python.exe initiated an internal RPC connection to 172.16.0.7:135. 
-•	13:00:35 UTC – python.exe established an additional RPC connection to 172.16.0.7:49669. 
-•	13:04:59 UTC – PowerShell executed a command that created the scheduled task PythonUpdate, configured to launch C:\Users\Ryan.Adams\Music\python.exe at system startup under the SYSTEM account.
+- 12:55:55 UTC – Ryan Adams launched Google Chrome via Windows Explorer.
+- 12:57:00 UTC – Google Chrome created/downloaded C:\Users\Ryan.Adams\Music\python.exe.
+- 12:57:18 UTC – Zone.Identifier alternate data stream was created, indicating the file originated from an external source.
+- 13:00:33 UTC – Ryan Adams executed python.exe from the Music directory.
+- 13:00:34 UTC – python.exe resolved ADDC01.KCD.local to 172.16.0.7 via DNS.
+- 13:00:34 UTC – python.exe established an outbound connection to 157.245.46.190:8888 (suspected C2 communication).
+- 13:00:34 UTC – python.exe initiated an internal RPC connection to 172.16.0.7:135.
+- 13:00:35 UTC – python.exe established an additional RPC connection to 172.16.0.7:49669.
+- 13:04:59 UTC – PowerShell executed a command that created the scheduled task PythonUpdate, configured to launch C:\Users\Ryan.Adams\Music\python.exe at system startup under the SYSTEM account.
 
 ### Correlation Analysis:
 Correlation of endpoint, DNS, process creation, network connection, and persistence events established a complete attack sequence. The investigation confirmed that Ryan Adams launched Google Chrome, downloaded an externally sourced executable, and subsequently executed the file. Immediately following execution, the malware performed a DNS query for ADDC01.KCD.local, successfully resolving the hostname to 172.16.0.7, the organization's Domain Controller. The malware then established outbound communications with external host 157.245.46.190 over TCP port 8888, consistent with suspected command-and-control activity, before initiating Microsoft RPC communications with the resolved Domain Controller. The RPC sequence included a connection to the RPC Endpoint Mapper (TCP port 135) followed by communication over a dynamically assigned RPC port, indicating intentional interaction with a domain resource rather than an arbitrary internal host. Approximately four minutes later, PowerShell executed a command that invoked schtasks.exe to create a scheduled task named PythonUpdate. The task was configured to execute the malicious binary at system startup under the SYSTEM account, establishing persistence and ensuring execution after a reboot. The combined evidence provides high confidence that the workstation was compromised through execution of a downloaded malicious payload that demonstrated domain awareness, communicated with an external command-and-control server, and established persistence while interacting with the organization's Domain Controller.
 
 ### Triage (5W & 1H)
 #### WHO:
-•	Ryan Adams 
-•	Workstation: FRONTDESK-PC1 
+	- Ryan Adams
+	- Workstation: FRONTDESK-PC1 
 #### WHAT:
 •	Downloaded and executed a malicious Python executable. 
 •	Performed DNS resolution of the internal Domain Controller (ADDC01.KCD.local). 
