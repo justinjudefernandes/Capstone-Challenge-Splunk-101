@@ -208,11 +208,11 @@ Correlation of endpoint, DNS, process creation, network connection, and persiste
 	- Ryan Adams
 	- Workstation: FRONTDESK-PC1 
 #### WHAT:
-•	Downloaded and executed a malicious Python executable. 
-•	Performed DNS resolution of the internal Domain Controller (ADDC01.KCD.local). 
-•	Established outbound communications with an external host. 
-•	Initiated Microsoft RPC communications with the Domain Controller. 
-•	Established persistence through a scheduled task.
+	- Downloaded and executed a malicious Python executable. 
+	- Performed DNS resolution of the internal Domain Controller (ADDC01.KCD.local). 
+	- Established outbound communications with an external host. 
+	- Initiated Microsoft RPC communications with the Domain Controller. 
+	- Established persistence through a scheduled task.
 #### WHEN:
 •	15 October 2025 
 •	12:57:00 UTC – Download 
