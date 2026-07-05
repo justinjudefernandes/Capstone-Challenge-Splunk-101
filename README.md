@@ -40,6 +40,9 @@ index="mydfir-soc" "python.exe"
 •	Download occurred approximately three minutes before execution 
 
 #### Screenshot:
+
+<img width="975" height="411" alt="image" src="https://github.com/user-attachments/assets/0fbaca06-a331-479c-971c-b0703f606895" />
+
  
 #### Findings Summary:
 •	Host: FRONTDESK-PC1 
@@ -66,8 +69,10 @@ index="mydfir-soc" sourcetype=Sysmon EventCode=1 Image="*python.exe"
 •	Executed by Ryan Adams 
 •	Executed from a non-standard directory 
 
-
 #### Screenshot:
+
+<img width="975" height="224" alt="image" src="https://github.com/user-attachments/assets/fe67ba36-38c7-4a72-b1d7-309f0bafb9bb" />
+
  
 #### Findings Summary:
 •	Process: python.exe 
@@ -77,6 +82,7 @@ index="mydfir-soc" sourcetype=Sysmon EventCode=1 Image="*python.exe"
 •	MITRE ATT&CK: T1204 – User Execution 
 
 ### Evidence 3 – Suspected Command-and-Control Communications
+
 #### Splunk Query:
 ```KQL Query:
 index="mydfir-soc" sourcetype=Sysmon EventCode=3
@@ -90,6 +96,9 @@ DestinationIp="157.245.46.190"
 •	Connection timing strongly indicates malware callback activity 
 
 #### Screenshot:
+
+<img width="975" height="191" alt="image" src="https://github.com/user-attachments/assets/3924e18d-410b-4156-adeb-07ad459e6a8a" />
+
  
 #### Findings Summary:
 •	Source Host: FRONTDESK-PC1 
@@ -115,8 +124,10 @@ ProcessGuid="{650091ea-9af1-68ef-8e0a-000000001500}"
 •	The successful lookup was immediately followed by Microsoft RPC communications to the resolved host.
 
 #### Screenshot:
- 
-#### Findings Summary:
+
+<img width="975" height="304" alt="image" src="https://github.com/user-attachments/assets/0afcb739-30aa-47d1-b5a0-05495aa5e311" />
+
+ #### Findings Summary:
 •	Process: python.exe 
 •	DNS Query: ADDC01.KCD.local 
 •	Resolved Address: 172.16.0.7 
@@ -140,6 +151,9 @@ Image="*python.exe"
 •	Activity occurred immediately after communication with the external command-and-control server.
 
 #### Screenshot:
+
+<img width="975" height="301" alt="image" src="https://github.com/user-attachments/assets/ba5b27d6-3e00-4f8a-9b93-c1ec02382114" />
+
  
 #### Findings Summary:
 •	Source IP: 172.16.0.110 
@@ -167,6 +181,9 @@ Image="*python.exe"
 •	This activity established persistence and would allow the malware to survive system reboots.
 
 #### Screenshot:
+
+<img width="975" height="241" alt="image" src="https://github.com/user-attachments/assets/393e0b50-4939-445c-bee2-79d3abc2dd38" />
+
  
 #### Findings Summary:
 •	Persistence Type: Scheduled Task 
