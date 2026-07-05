@@ -39,9 +39,9 @@ index="mydfir-soc" "python.exe"
 •	Zone Identifier confirms the file originated from an external source 
 •	Download occurred approximately three minutes before execution 
 
-Screenshot:
+#### Screenshot:
  
-Findings Summary:
+#### Findings Summary:
 •	Host: FRONTDESK-PC1 
 •	User: Ryan Adams 
 •	Download Source Process: chrome.exe 
@@ -52,19 +52,24 @@ Findings Summary:
 •	MITRE ATT&CK: T1105 – Ingress Tool Transfer 
 
 ### Evidence 2 – Malware Execution
-Splunk Query:
+
+#### Splunk Query:
+
+```KQL Query:
 index="mydfir-soc" sourcetype=Sysmon EventCode=1 Image="*python.exe"
 | table _time Image CommandLine ParentImage CurrentDirectory User ProcessGuid ParentProcessGuid
-Findings:
+```
+
+#### Findings:
 •	Executed at 13:00:33 UTC 
 •	Launched by explorer.exe 
 •	Executed by Ryan Adams 
 •	Executed from a non-standard directory 
 
 
-Screenshot:
+#### Screenshot:
  
-Findings Summary:
+#### Findings Summary:
 •	Process: python.exe 
 •	Parent Process: explorer.exe 
 •	User: Ryan Adams 
@@ -72,18 +77,21 @@ Findings Summary:
 •	MITRE ATT&CK: T1204 – User Execution 
 
 ### Evidence 3 – Suspected Command-and-Control Communications
-Splunk Query:
+#### Splunk Query:
+```KQL Query:
 index="mydfir-soc" sourcetype=Sysmon EventCode=3
 DestinationIp="157.245.46.190"
 | table _time Image SourceIp DestinationIp DestinationPort User ProcessGuid
+```
 
-Findings:
+#### Findings:
 •	One second after execution (at 13:00:33 UTC), python.exe connected to external IP 157.245.46.190 from 172.16.0.110
 •	Communication occurred over TCP port 8888 
 •	Connection timing strongly indicates malware callback activity 
-Screenshot:
+
+#### Screenshot:
  
-Findings Summary:
+#### Findings Summary:
 •	Source Host: FRONTDESK-PC1 
 •	Source Process: python.exe 
 •	Destination IP: 157.245.46.190 
@@ -92,18 +100,23 @@ Findings Summary:
 •	MITRE ATT&CK: T1071 – Application Layer Protocol 
 
 ### Evidence 4 – Domain Controller Discovery and Internal RPC Communications
-Splunk Query:
+
+#### Splunk Query:
+```KQL Query:
 index="mydfir-soc" sourcetype=Sysmon EventCode=22
 ProcessGuid="{650091ea-9af1-68ef-8e0a-000000001500}"
 | table _time Image QueryName QueryResults QueryStatus
-Findings:
+```
+
+#### Findings:
 •	Immediately after execution, python.exe performed a DNS query for ADDC01.KCD.local. 
 •	The DNS response successfully resolved the hostname to 172.16.0.7. 
 •	This indicates that the malware identified the internal Domain Controller before initiating network communication. 
 •	The successful lookup was immediately followed by Microsoft RPC communications to the resolved host.
-Screenshot:
+
+#### Screenshot:
  
-Findings Summary:
+#### Findings Summary:
 •	Process: python.exe 
 •	DNS Query: ADDC01.KCD.local 
 •	Resolved Address: 172.16.0.7 
@@ -112,19 +125,23 @@ Findings Summary:
 
 
 ### Evidence 5 – Internal RPC Communications
-Splunk Query:
+#### Splunk Query:
+```KQL Query:
 index="mydfir-soc" sourcetype=Sysmon EventCode=3
 Image="*python.exe"
 | table _time Computer User Image SourceIp DestinationIp DestinationPort Protocol ProcessGuid
 | sort _time
-Findings:
+```
+
+#### Findings:
 •	Immediately after resolving ADDC01.KCD.local, the malware initiated Microsoft RPC communications with 172.16.0.7. 
 •	Connected to the RPC Endpoint Mapper on TCP port 135. 
 •	Established a second connection to the dynamically allocated RPC port 49669. 
 •	Activity occurred immediately after communication with the external command-and-control server.
-Screenshot:
+
+#### Screenshot:
  
-Findings Summary:
+#### Findings Summary:
 •	Source IP: 172.16.0.110 
 •	Destination Host: ADDC01.KCD.local
 •	Destination IP: 172.16.0.7 
@@ -133,22 +150,25 @@ Findings Summary:
 •	Assessment: Domain-aware RPC communication with the internal Domain Controller. Available telemetry confirms hostname resolution and RPC connectivity but does not demonstrate successful remote execution or compromise of the Domain Controller.
 
 
-
-
 ### Evidence 6 – Persistence Mechanism
-Splunk Query:
+
+#### Splunk Query:
+```KQL Query:
 	index="mydfir-soc" "python.exe"
 	| table _time sourcetype EventCode Image TargetFilename CommandLine
 	| sort -_time
-Findings:
+```
+
+#### Findings:
 •	At 13:04:59 UTC, PowerShell executed a command invoking schtasks.exe. 
 •	The command created a scheduled task named PythonUpdate. 
 •	The task was configured to execute C:\Users\Ryan.Adams\Music\python.exe. 
 •	The task was configured to run at system startup. The task was configured to run under the SYSTEM account. 
 •	This activity established persistence and would allow the malware to survive system reboots.
-Screenshot:
+
+#### Screenshot:
  
-Findings Summary:
+#### Findings Summary:
 •	Persistence Type: Scheduled Task 
 •	Task Name: PythonUpdate 
 •	Trigger: On Startup 
@@ -156,7 +176,7 @@ Findings Summary:
 •	Executable: python.exe 
 •	MITRE ATT&CK: T1053.005 – Scheduled Task 
 
-Attack Timeline:
+### Attack Timeline:
 •	12:55:55 UTC – Ryan Adams launched Google Chrome via Windows Explorer. 
 •	12:57:00 UTC – Google Chrome created/downloaded C:\Users\Ryan.Adams\Music\python.exe. 
 •	12:57:18 UTC – Zone.Identifier alternate data stream was created, indicating the file originated from an external source. 
@@ -167,20 +187,20 @@ Attack Timeline:
 •	13:00:35 UTC – python.exe established an additional RPC connection to 172.16.0.7:49669. 
 •	13:04:59 UTC – PowerShell executed a command that created the scheduled task PythonUpdate, configured to launch C:\Users\Ryan.Adams\Music\python.exe at system startup under the SYSTEM account.
 
-Correlation Analysis:
+### Correlation Analysis:
 Correlation of endpoint, DNS, process creation, network connection, and persistence events established a complete attack sequence. The investigation confirmed that Ryan Adams launched Google Chrome, downloaded an externally sourced executable, and subsequently executed the file. Immediately following execution, the malware performed a DNS query for ADDC01.KCD.local, successfully resolving the hostname to 172.16.0.7, the organization's Domain Controller. The malware then established outbound communications with external host 157.245.46.190 over TCP port 8888, consistent with suspected command-and-control activity, before initiating Microsoft RPC communications with the resolved Domain Controller. The RPC sequence included a connection to the RPC Endpoint Mapper (TCP port 135) followed by communication over a dynamically assigned RPC port, indicating intentional interaction with a domain resource rather than an arbitrary internal host. Approximately four minutes later, PowerShell executed a command that invoked schtasks.exe to create a scheduled task named PythonUpdate. The task was configured to execute the malicious binary at system startup under the SYSTEM account, establishing persistence and ensuring execution after a reboot. The combined evidence provides high confidence that the workstation was compromised through execution of a downloaded malicious payload that demonstrated domain awareness, communicated with an external command-and-control server, and established persistence while interacting with the organization's Domain Controller.
 
-Triage (5W & 1H)
-WHO:
+### Triage (5W & 1H)
+#### WHO:
 •	Ryan Adams 
 •	Workstation: FRONTDESK-PC1 
-WHAT:
+#### WHAT:
 •	Downloaded and executed a malicious Python executable. 
 •	Performed DNS resolution of the internal Domain Controller (ADDC01.KCD.local). 
 •	Established outbound communications with an external host. 
 •	Initiated Microsoft RPC communications with the Domain Controller. 
 •	Established persistence through a scheduled task.
-WHEN:
+#### WHEN:
 •	15 October 2025 
 •	12:57:00 UTC – Download 
 •	13:00:33 UTC – Execution 
@@ -188,25 +208,25 @@ WHEN:
 •	13:00:34 UTC – External callback to 157.245.46.190:8888 
 •	13:00:34 UTC – Microsoft RPC communication with 172.16.0.7 
 •	13:04:59 UTC – Persistence established
-WHERE:
+#### WHERE:
 •	Endpoint: FRONTDESK-PC1 
 •	File Path: C:\Users\Ryan.Adams\Music\python.exe 
 •	External IP: 157.245.46.190
 •	Domain Controller: ADDC01.KCD.local
 •	Internal IP: 172.16.0.7 
-WHY:
+#### WHY:
 •	Establish unauthorized access and persistence on the endpoint. 
 •	Maintain execution after system reboot. 
 •	Communicate with an external command-and-control infrastructure.
 •	Identify and communicate with the organization's Domain Controller, potentially to support domain reconnaissance or facilitate follow-on malicious activity.
-HOW:
+#### HOW:
 •	User launched Google Chrome. 
 •	Malware was downloaded from an external source. 
 •	User executed the downloaded binary. 
 •	Malware resolved ADDC01.KCD.local via DNS before communicating with the Domain Controller using Microsoft RPC.
 •	Malware established outbound communications and persistence through Scheduled Tasks. 
 
-Actions Performed:
+## Actions Performed:
 •	Reviewed endpoint, process creation, DNS, and network telemetry surrounding the reported suspicious activity. 
 •	Identified the creation of python.exe by Google Chrome within the user's profile directory. 
 •	Confirmed the downloaded executable originated from an external source through analysis of the Zone.Identifier alternate data stream. 
@@ -222,7 +242,7 @@ Actions Performed:
 •	Assessed the scope and impact of the activity based on available telemetry. 
 •	Preserved evidence and investigation artifacts for reporting and future analysis.
 
-Recommendations:
+## Recommendations:
 •	Remove the malicious scheduled task (PythonUpdate) and any associated persistence mechanisms from affected systems. 
 •	Quarantine and securely delete the malicious executable from the affected endpoint. 
 •	Perform a full malware scan and endpoint health assessment on FRONTDESK-PC1. 
@@ -235,7 +255,7 @@ Recommendations:
 •	Conduct threat hunting across the environment for similar DNS, RPC, scheduled task, and command-and-control behaviors. 
 •	Continue user awareness training focused on identifying suspicious downloads and executable files.
 
-Lessons Learned:
+## Lessons Learned:
 •	User-reported anomalies can provide valuable early indicators of malicious activity and should be investigated promptly. 
 •	Correlating endpoint, DNS, and network telemetry enables more accurate reconstruction of attacker behavior and intent. 
 •	Monitoring file creation, process execution, DNS resolution, and network connections is critical for identifying the complete attack chain. 
