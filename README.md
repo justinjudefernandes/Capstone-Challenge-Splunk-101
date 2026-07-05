@@ -26,19 +26,18 @@ Approximately four minutes later, PowerShell executed schtasks.exe, creating a s
 
 ### Evidence 1 – Initial Download via Google Chrome
 
-Splunk Query:
+#### Splunk Query:
+```KQL Query:
 index="mydfir-soc" "python.exe"
 | table _time sourcetype EventCode Image TargetFilename CommandLine
 | sort _time
-Findings:
+```
+
+#### Findings:
 •	At 12:57:00 UTC, Chrome created C:\Users\Ryan.Adams\Music\python.exe 
 •	Event ID 15 recorded creation of Zone.Identifier 
 •	Zone Identifier confirms the file originated from an external source 
 •	Download occurred approximately three minutes before execution 
-
-
-
-
 
 Screenshot:
  
