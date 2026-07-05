@@ -24,7 +24,7 @@ Immediately following the external connection, the malware initiated Microsoft R
 
 Approximately four minutes later, PowerShell executed schtasks.exe, creating a scheduled task named PythonUpdate configured to execute the malicious binary at system startup under the SYSTEM account, thereby establishing persistence.
 
-### Evidence 1 – Initial Download via Google Chrome
+### 🔍 Evidence 1 – Initial Download via Google Chrome
 
 #### Splunk Query:
 ```KQL Query:
@@ -53,7 +53,7 @@ index="mydfir-soc" "python.exe"
 - Additional Evidence: Zone.Identifier ADS
 - MITRE ATT&CK: T1105 – Ingress Tool Transfer 
 
-### Evidence 2 – Malware Execution
+### 🔍 Evidence 2 – Malware Execution
 
 #### Splunk Query:
 
@@ -79,7 +79,7 @@ index="mydfir-soc" sourcetype=Sysmon EventCode=1 Image="*python.exe"
 - Execution Path: C:\Users\Ryan.Adams\Music\python.exe
 - MITRE ATT&CK: T1204 – User Execution 
 
-### Evidence 3 – Suspected Command-and-Control Communications
+### 🔍 Evidence 3 – Suspected Command-and-Control Communications
 
 #### Splunk Query:
 ```KQL Query:
@@ -105,7 +105,7 @@ DestinationIp="157.245.46.190"
 - Protocol: TCP
 - MITRE ATT&CK: T1071 – Application Layer Protocol 
 
-### Evidence 4 – Domain Controller Discovery and Internal RPC Communications
+### 🔍 Evidence 4 – Domain Controller Discovery and Internal RPC Communications
 
 #### Splunk Query:
 
@@ -132,7 +132,7 @@ ProcessGuid="{650091ea-9af1-68ef-8e0a-000000001500}"
 - Result: Successful (QueryStatus = 0)
 - Assessment: Malware identified the internal Domain Controller prior to initiating RPC communications.
 
-### Evidence 5 – Internal RPC Communications
+### 🔍 Evidence 5 – Internal RPC Communications
 
 #### Splunk Query:
 
@@ -161,7 +161,7 @@ Image="*python.exe"
 - Protocol: TCP
 - Assessment: Domain-aware RPC communication with the internal Domain Controller. Available telemetry confirms hostname resolution and RPC connectivity but does not demonstrate successful remote execution or compromise of the Domain Controller.
 
-### Evidence 6 – Persistence Mechanism
+### 🔍 Evidence 6 – Persistence Mechanism
 
 #### Splunk Query:
 ```KQL Query:
