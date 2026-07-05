@@ -214,69 +214,69 @@ Correlation of endpoint, DNS, process creation, network connection, and persiste
 	- Initiated Microsoft RPC communications with the Domain Controller. 
 	- Established persistence through a scheduled task.
 #### WHEN:
-•	15 October 2025 
-•	12:57:00 UTC – Download 
-•	13:00:33 UTC – Execution 
-•	13:00:34 UTC – DNS resolution of ADDC01.KCD.local 
-•	13:00:34 UTC – External callback to 157.245.46.190:8888 
-•	13:00:34 UTC – Microsoft RPC communication with 172.16.0.7 
-•	13:04:59 UTC – Persistence established
+	- 15 October 2025 
+	- 12:57:00 UTC – Download 
+	- 13:00:33 UTC – Execution 
+	- 13:00:34 UTC – DNS resolution of ADDC01.KCD.local 
+	- 13:00:34 UTC – External callback to 157.245.46.190:8888 
+	- 13:00:34 UTC – Microsoft RPC communication with 172.16.0.7 
+	- 13:04:59 UTC – Persistence established
 #### WHERE:
-•	Endpoint: FRONTDESK-PC1 
-•	File Path: C:\Users\Ryan.Adams\Music\python.exe 
-•	External IP: 157.245.46.190
-•	Domain Controller: ADDC01.KCD.local
-•	Internal IP: 172.16.0.7 
+	- Endpoint: FRONTDESK-PC1 
+	- File Path: C:\Users\Ryan.Adams\Music\python.exe 
+	- External IP: 157.245.46.190
+	- Domain Controller: ADDC01.KCD.local
+	- Internal IP: 172.16.0.7 
 #### WHY:
-•	Establish unauthorized access and persistence on the endpoint. 
-•	Maintain execution after system reboot. 
-•	Communicate with an external command-and-control infrastructure.
-•	Identify and communicate with the organization's Domain Controller, potentially to support domain reconnaissance or facilitate follow-on malicious activity.
+	- Establish unauthorized access and persistence on the endpoint. 
+	- Maintain execution after system reboot. 
+	- Communicate with an external command-and-control infrastructure.
+	- Identify and communicate with the organization's Domain Controller, potentially to support domain reconnaissance or facilitate follow-on malicious activity.
 #### HOW:
-•	User launched Google Chrome. 
-•	Malware was downloaded from an external source. 
-•	User executed the downloaded binary. 
-•	Malware resolved ADDC01.KCD.local via DNS before communicating with the Domain Controller using Microsoft RPC.
-•	Malware established outbound communications and persistence through Scheduled Tasks. 
+	- User launched Google Chrome. 
+	- Malware was downloaded from an external source. 
+	- User executed the downloaded binary. 
+	- Malware resolved ADDC01.KCD.local via DNS before communicating with the Domain Controller using Microsoft RPC.
+	- Malware established outbound communications and persistence through Scheduled Tasks. 
 
 ## Actions Performed:
-•	Reviewed endpoint, process creation, DNS, and network telemetry surrounding the reported suspicious activity. 
-•	Identified the creation of python.exe by Google Chrome within the user's profile directory. 
-•	Confirmed the downloaded executable originated from an external source through analysis of the Zone.Identifier alternate data stream. 
-•	Traced execution of the suspicious executable and reconstructed the complete attack sequence from download through persistence. 
-•	Correlated process execution with outbound communications to external host 157.245.46.190, consistent with suspected command-and-control activity. 
-•	Investigated DNS activity and confirmed that python.exe resolved ADDC01.KCD.local to 172.16.0.7 immediately before initiating internal communications. 
-•	Validated the sequence of DNS resolution followed by Microsoft RPC communications with the Domain Controller, confirming intentional targeting of an internal domain resource. 
-•	Investigated internal communications with ADDC01.KCD.local (172.16.0.7) to assess potential domain reconnaissance or lateral movement activity. 
-•	Reviewed the execution timeline using the process GUID to correlate process creation, DNS activity, network connections, and persistence events. 
-•	Confirmed persistence through creation of the scheduled task PythonUpdate. 
-•	Constructed a comprehensive attack timeline using Sysmon, Zeek, Suricata, Windows Event Logs, and PowerShell telemetry. 
-•	Documented indicators of compromise (IOCs), malicious artifacts, and observed attacker behaviors. 
-•	Assessed the scope and impact of the activity based on available telemetry. 
-•	Preserved evidence and investigation artifacts for reporting and future analysis.
+- Reviewed endpoint, process creation, DNS, and network telemetry surrounding the reported suspicious activity.
+- Identified the creation of python.exe by Google Chrome within the user's profile directory.
+- Confirmed the downloaded executable originated from an external source through analysis of the Zone.Identifier alternate data stream.
+- Traced execution of the suspicious executable and reconstructed the complete attack sequence from download through persistence.
+- Correlated process execution with outbound communications to external host 157.245.46.190, consistent with suspected command-and-control activity.
+- Investigated DNS activity and confirmed that python.exe resolved ADDC01.KCD.local to 172.16.0.7 immediately before initiating internal communications.
+- Validated the sequence of DNS resolution followed by Microsoft RPC communications with the Domain Controller, confirming intentional targeting of an internal domain resource.
+- Investigated internal communications with ADDC01.KCD.local (172.16.0.7) to assess potential domain reconnaissance or lateral movement activity.
+- Reviewed the execution timeline using the process GUID to correlate process creation, DNS activity, network connections, and persistence events.
+- Confirmed persistence through creation of the scheduled task PythonUpdate.
+- Constructed a comprehensive attack timeline using Sysmon, Zeek, Suricata, Windows Event Logs, and PowerShell telemetry.
+- Documented indicators of compromise (IOCs), malicious artifacts, and observed attacker behaviors.
+- Assessed the scope and impact of the activity based on available telemetry.
+- Preserved evidence and investigation artifacts for reporting and future analysis.
 
 ## Recommendations:
-•	Remove the malicious scheduled task (PythonUpdate) and any associated persistence mechanisms from affected systems. 
-•	Quarantine and securely delete the malicious executable from the affected endpoint. 
-•	Perform a full malware scan and endpoint health assessment on FRONTDESK-PC1. 
-•	Reset credentials associated with the impacted user account and review privileged access assignments. 
-•	Conduct a forensic review of ADDC01.KCD.local (172.16.0.7) to determine whether any unauthorized authentication, RPC activity, or lateral movement occurred. 
-•	Review Domain Controller Security, DNS, RPC, and SMB logs for evidence of malicious activity associated with the compromised workstation. 
-•	Block identified malicious IP addresses (157.245.46.190) and any related indicators of compromise at network security controls. 
-•	Implement application control policies to restrict execution of binaries from user profile directories. 
-•	Enhance monitoring and alerting for DNS queries targeting critical infrastructure, scheduled task creation, unusual process execution paths, Microsoft RPC activity, and outbound connections to non-standard ports. 
-•	Conduct threat hunting across the environment for similar DNS, RPC, scheduled task, and command-and-control behaviors. 
-•	Continue user awareness training focused on identifying suspicious downloads and executable files.
+- Remove the malicious scheduled task (PythonUpdate) and any associated persistence mechanisms from affected systems.
+- Quarantine and securely delete the malicious executable from the affected endpoint.
+- Perform a full malware scan and endpoint health assessment on FRONTDESK-PC1.
+- Reset credentials associated with the impacted user account and review privileged access assignments.
+- Conduct a forensic review of ADDC01.KCD.local (172.16.0.7) to determine whether any unauthorized authentication, RPC activity, or lateral movement occurred.
+- Review Domain Controller Security, DNS, RPC, and SMB logs for evidence of malicious activity associated with the compromised workstation.
+- Block identified malicious IP addresses (157.245.46.190) and any related indicators of compromise at network security controls.
+- Implement application control policies to restrict execution of binaries from user profile directories.
+- Enhance monitoring and alerting for DNS queries targeting critical infrastructure, scheduled task creation, unusual process execution paths, Microsoft RPC activity, and outbound connections to non-standard ports.
+- Conduct threat hunting across the environment for similar DNS, RPC, scheduled task, and command-and-control behaviors.
+- Continue user awareness training focused on identifying suspicious downloads and executable files.
 
 ## Lessons Learned:
-•	User-reported anomalies can provide valuable early indicators of malicious activity and should be investigated promptly. 
-•	Correlating endpoint, DNS, and network telemetry enables more accurate reconstruction of attacker behavior and intent. 
-•	Monitoring file creation, process execution, DNS resolution, and network connections is critical for identifying the complete attack chain. 
-•	Executables located within user profile directories should be treated as suspicious until validated. 
-•	Malware may demonstrate domain awareness by resolving and communicating with critical infrastructure such as Domain Controllers before attempting further actions. 
-•	Internal RPC communications should be investigated in conjunction with DNS and authentication logs to assess potential domain reconnaissance or lateral movement. 
-•	Persistence mechanisms may not always be captured through traditional Windows event logs and should be validated using multiple telemetry sources. 
-•	Timely identification and containment of malicious activity reduces the likelihood of persistence and further compromise. 
+- User-reported anomalies can provide valuable early indicators of malicious activity and should be investigated promptly.
+- Correlating endpoint, DNS, and network telemetry enables more accurate reconstruction of attacker behavior and intent. 
+- Monitoring file creation, process execution, DNS resolution, and network connections is critical for identifying the complete attack chain.
+- Executables located within user profile directories should be treated as suspicious until validated.
+- Malware may demonstrate domain awareness by resolving and communicating with critical infrastructure such as Domain Controllers before attempting further actions.
+- Internal RPC communications should be investigated in conjunction with DNS and authentication logs to assess potential domain reconnaissance or lateral movement.
+- Persistence mechanisms may not always be captured through traditional Windows event logs and should be validated using multiple telemetry sources.
+- Timely identification and containment of malicious activity reduces the likelihood of persistence and further compromise. 
 •	Comprehensive logging across endpoint, DNS, network, and authentication layers significantly improves incident response and root cause analysis. 
 •	Maintaining a detailed timeline of attacker activity strengthens investigative findings and supports accurate reporting. 
 •	Scheduled tasks remain a frequently abused persistence mechanism and should be continuously monitored. 
